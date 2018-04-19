@@ -21,16 +21,19 @@ public class FactureService {
     private FactureRepository factureRepository;
     @Autowired
     private ClientMapper clientMapper;
+    
+    @Autowired 
+    private FactureMapper factureMapper;
 
     public List<FactureDTO> findAllFactures() {
         return factureRepository.findAll().stream().map(this::toDTO).collect(toList());
     }
 
-    private FactureDTO toDTO(Facture f) {
+    private FactureDTO toDTO(Facture facture) {
         FactureDTO factureDTO = new FactureDTO();
-        factureDTO.setId(f.getId());
-        factureDTO.setClient(clientMapper.map(f.getClient()));
-        factureDTO.setLigneFactures(f.getLigneFactures().stream().map(this::mapLigneFacture).collect(toList()));
+       factureDTO.setId(facture.getId());
+        factureDTO.setClient(clientMapper.map(facture.getClient()));
+        factureDTO.setLigneFactures(facture.getLigneFactures().stream().map(this::mapLigneFacture).collect(toList()));
         return factureDTO;
     }
 
@@ -49,4 +52,10 @@ public class FactureService {
                 new IllegalArgumentException("Facture inconnu " + id)
         );
     }
+    
+    public List <FactureDTO> findByClientId (Long clientId) {
+    	return factureRepository.findByClientId(clientId).stream().map(this::toDTO).collect(toList());
+    }
+    
+    
 }

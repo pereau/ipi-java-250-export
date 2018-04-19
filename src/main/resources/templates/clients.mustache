@@ -3,6 +3,9 @@
     <tr>
         <th>Nom</th>
         <th>Prénom</th>
+        <th>Age</th>
+        <th>Code Postal</th>
+        <th>Commune</th>
     </tr>
     </thead>
     <tbody>
@@ -10,7 +13,15 @@
         <tr>
             <td>{{nom}}</td>
             <td>{{prenom}}</td>
+            <td>{{age}}</td>
+            <td>{{cp}}</td>
+            <td>{{commune}}</td>
+            <td><a href="/facture/xls/{{id}}">facture</a></td>
+         
+            
+                     
         </tr>
     {{/clients}}
+   
     </tbody>
 </table>

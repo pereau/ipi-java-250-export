@@ -17,6 +17,17 @@ public class Client {
 
     @Column
     private String nom;
+    
+    @Column
+    private Integer age;
+    
+    @Column
+    private Integer cp;
+    
+    @Column
+    private String commune;
+
+
 
     public Long getId() {
         return id;
@@ -41,4 +52,31 @@ public class Client {
     public void setNom(String nom) {
         this.nom = nom;
     }
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
+	public Integer getCp() {
+		return cp;
+	}
+
+	public void setCp(Integer cp) {
+		this.cp = cp;
+	}
+
+	public String getCommune() {
+		return commune;
+	}
+
+	public void setCommune(String commune) {
+		this.commune = commune;
+	}
+    
+    
+    
 }
