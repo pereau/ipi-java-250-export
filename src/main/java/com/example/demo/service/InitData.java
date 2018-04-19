@@ -53,6 +53,20 @@ public class InitData {
         ligneFacture1_2.setQuantite(2);
         em.persist(ligneFacture1_2);
         
+        Article article1_3 = new Article();
+        article1_3.setLibelle("Carte mère ASROCK 2348");
+        article1_3.setPrix(100.0);
+        em.persist(article1_3);
+        
+        Facture facture1_2 = new Facture();
+        facture1_2.setClient(client);
+        em.persist(facture1_2);
+        
+        LigneFacture ligneFacture1_2_2 = new LigneFacture();
+        ligneFacture1_2_2.setFacture(facture1_2);
+        ligneFacture1_2_2.setArticle(article1_3);
+        ligneFacture1_2_2.setQuantite(3);
+        em.persist(ligneFacture1_2_2);
         Client client2  = new Client();
         client2.setNom("Coltrane");
         client2.setPrenom("John");

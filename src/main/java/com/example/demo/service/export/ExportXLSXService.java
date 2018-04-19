@@ -77,6 +77,8 @@ public class ExportXLSXService {
 	public void editFactureXLSX (OutputStream outputStream, List<FactureDTO> factures) throws IOException {
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		int numFacture=1;
+		int nbArticle = 0;
+		Double total = 0.0;
 		for (FactureDTO factureDTO : factures) {
 			
 			String sheetName = "facture de  " + factureDTO.getClient().getNom() + " N°" + numFacture;
@@ -86,32 +88,60 @@ public class ExportXLSXService {
 			cellClient.setCellValue("PRENOM");
 			cellClient = headerRowOnglet.createCell(1);
 			cellClient.setCellValue("NOM");
-			Cell cellLigneFacture = headerRowOnglet.createCell(2);
-			cellLigneFacture.setCellValue("ARTICLE");
-			cellLigneFacture = headerRowOnglet.createCell(3);
-			cellLigneFacture.setCellValue("PRIX UNITAIRE");
-			cellLigneFacture = headerRowOnglet.createCell(4);
-			cellLigneFacture.setCellValue("QUANTITE");
 			
-			Row row = onglet.createRow(3);
+			
+			
+			Row row = onglet.createRow(1);
 			Cell cellClientPrenom = row.createCell(0);
 			cellClientPrenom.setCellValue(factureDTO.getClient().getPrenom());
 			Cell cellClientNom = row.createCell(1);
 			cellClientNom.setCellValue(factureDTO.getClient().getNom());
 			
-			for (int numLigne = 1 ; numLigne <= factureDTO.getLigneFactures().size() ; numLigne++) {
-				row = onglet.createRow(1 + numLigne);
-				cellLigneFacture = row.createCell(2);
+			Row headerRow2 = onglet.createRow(3);
+			Cell cellLigneFacture = headerRow2.createCell(0);
+			cellLigneFacture.setCellValue("ARTICLE");
+			cellLigneFacture = headerRow2.createCell(1);
+			cellLigneFacture.setCellValue("PRIX UNITAIRE");
+			cellLigneFacture = headerRow2.createCell(2);
+			cellLigneFacture.setCellValue("QUANTITE");
+			int n = factureDTO.getLigneFactures().size();
+			System.out.println(n);
+			for (int numLigne = 1 ; numLigne <= n  ; numLigne++) {
+				nbArticle += 1;
+				System.out.println(factureDTO.getLigneFactures().get(numLigne - 1).getDesignation());
+				System.out.println(numLigne -1);
+				System.out.println(factureDTO.getId());
+				Row rowLf = onglet.createRow(numLigne +3);
+				cellLigneFacture = rowLf.createCell(0);
 			    cellLigneFacture.setCellValue(factureDTO.getLigneFactures().get(numLigne - 1).getDesignation());
-			    cellLigneFacture = row.createCell(3);
+			    cellLigneFacture = rowLf.createCell(1);
 			    cellLigneFacture.setCellValue(factureDTO.getLigneFactures().get(numLigne - 1).getPrixUnitaire());
-			    cellLigneFacture = row.createCell(4);
+			    cellLigneFacture = rowLf.createCell(2);
 			    cellLigneFacture.setCellValue(factureDTO.getLigneFactures().get(numLigne - 1).getQuantite());
+			    
+			    total += factureDTO.getLigneFactures().get(numLigne - 1).getPrixUnitaire()*factureDTO.getLigneFactures().get(numLigne - 1).getQuantite();
+			    
+			    
 			    
 			}
 			
 			numFacture+=1;
 		}
+		
+		XSSFSheet prixTotal = workbook.createSheet("Prix Total");
+		Row headerTotal = prixTotal.createRow(0);
+		Cell cell1 = headerTotal.createCell(0);
+		cell1.setCellValue("Nombre  total d'articles");
+		Cell cell2 = headerTotal.createCell(1);
+		cell2.setCellValue("Prix  total");
+		cell2 = headerTotal.createCell(2);
+		Row rowTotal = prixTotal.createRow(1);
+		Cell cell3 = rowTotal.createCell(0);
+		cell3.setCellValue(nbArticle);
+		Cell cell4 = rowTotal.createCell(1);
+		cell4.setCellValue(total);
+		
+		
 		
 		workbook.write(outputStream);
 		workbook.close();
