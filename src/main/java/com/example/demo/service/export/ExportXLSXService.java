@@ -76,10 +76,10 @@ public class ExportXLSXService {
 	
 	public void editFactureXLSX (OutputStream outputStream, List<FactureDTO> factures) throws IOException {
 		XSSFWorkbook workbook = new XSSFWorkbook();
-		int num=1;
+		int numFacture=1;
 		for (FactureDTO factureDTO : factures) {
 			
-			String sheetName = "facture de  " + factureDTO.getClient().getNom() + " N°" + num;
+			String sheetName = "facture de  " + factureDTO.getClient().getNom() + " N°" + numFacture;
 			XSSFSheet onglet = workbook.createSheet(sheetName);
 			Row headerRowOnglet = onglet.createRow(0);
 			Cell cellClient = headerRowOnglet.createCell(0);
@@ -93,20 +93,24 @@ public class ExportXLSXService {
 			cellLigneFacture = headerRowOnglet.createCell(4);
 			cellLigneFacture.setCellValue("QUANTITE");
 			
-			Row row = onglet.createRow(1);
+			Row row = onglet.createRow(3);
 			Cell cellClientPrenom = row.createCell(0);
 			cellClientPrenom.setCellValue(factureDTO.getClient().getPrenom());
 			Cell cellClientNom = row.createCell(1);
 			cellClientNom.setCellValue(factureDTO.getClient().getNom());
-			cellLigneFacture = row.createCell(2);
-		    cellLigneFacture.setCellValue(factureDTO.getLigneFactures().get(num - 1).getDesignation());
-		    cellLigneFacture = row.createCell(3);
-		    cellLigneFacture.setCellValue(factureDTO.getLigneFactures().get(num - 1).getPrixUnitaire());
-		    cellLigneFacture = row.createCell(4);
-		    cellLigneFacture.setCellValue(factureDTO.getLigneFactures().get(num - 1).getQuantite());
 			
+			for (int numLigne = 1 ; numLigne <= factureDTO.getLigneFactures().size() ; numLigne++) {
+				row = onglet.createRow(1 + numLigne);
+				cellLigneFacture = row.createCell(2);
+			    cellLigneFacture.setCellValue(factureDTO.getLigneFactures().get(numLigne - 1).getDesignation());
+			    cellLigneFacture = row.createCell(3);
+			    cellLigneFacture.setCellValue(factureDTO.getLigneFactures().get(numLigne - 1).getPrixUnitaire());
+			    cellLigneFacture = row.createCell(4);
+			    cellLigneFacture.setCellValue(factureDTO.getLigneFactures().get(numLigne - 1).getQuantite());
+			    
+			}
 			
-			num+=1;
+			numFacture+=1;
 		}
 		
 		workbook.write(outputStream);
